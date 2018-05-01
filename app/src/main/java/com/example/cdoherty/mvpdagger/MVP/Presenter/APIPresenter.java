@@ -4,6 +4,9 @@ import com.example.cdoherty.mvpdagger.Data.Model.Model.Item;
 import com.example.cdoherty.mvpdagger.MVP.Interactor.APIListener;
 import com.example.cdoherty.mvpdagger.MVP.Interactor.InteractorImpl;
 import com.example.cdoherty.mvpdagger.MVP.Interactor.ViewListener;
+import com.example.cdoherty.mvpdagger.MVP.Model.ModelAPI;
+import com.example.cdoherty.mvpdagger.View.IAdapterPresenter;
+import com.example.cdoherty.mvpdagger.View.RowView;
 
 import java.util.ArrayList;
 
@@ -15,23 +18,26 @@ import javax.inject.Inject;
 
 public class APIPresenter implements APIListener {
 
-    private InteractorImpl interactor;
     private ViewListener viewListener;
 
     @Inject
-    APIPresenter(InteractorImpl interactor, ViewListener viewListener) {
-        this.interactor = interactor;
+    ModelAPI modelAPI;
+
+    public APIPresenter(ViewListener viewListener) {
         this.viewListener = viewListener;
-        interactor.setListener(this);
+        modelAPI.setListener(this);
     }
 
-    public void loadList(){
-        interactor.loadFromAPI();
-        interactor.isContextNull();
+
+
+    public void loadList() {
+        modelAPI.loadFromAPI();
+        modelAPI.isContextNull();
     }
 
     @Override
     public void updateResponse(ArrayList<Item> response) {
         viewListener.updateUI(response);
     }
+
 }

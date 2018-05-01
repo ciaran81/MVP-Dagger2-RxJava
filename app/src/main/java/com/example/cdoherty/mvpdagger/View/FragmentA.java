@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,11 +33,11 @@ import butterknife.OnClick;
 
 public class FragmentA extends Fragment implements ViewListener {
     public static final String TAG = FragmentA.class.getSimpleName();
-    @Inject
-    APIPresenter presenter;
+    private APIPresenter presenter;
     private ArrayList<Item> responses = new ArrayList<>();
-    //todo setup the adapter here
-
+    private ItemListAdapter adapter;
+    @BindView(R.id.recycler_items)
+    RecyclerView recyclerView;
 
     @OnClick(R.id.button)
     void getText() {
@@ -49,7 +51,7 @@ public class FragmentA extends Fragment implements ViewListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((MyApplication) getActivity().getApplication()).getComponent().inject(this);
+        presenter = new APIPresenter(this);
     }
 
     @Nullable
@@ -57,12 +59,23 @@ public class FragmentA extends Fragment implements ViewListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_a, container, false);
         ButterKnife.bind(this, view);
+        prepareRecyclerAdapter();
         return view;
     }
 
     @Override
     public void updateUI(ArrayList<Item> response) {
-
+//        adapter.setItems(response);
+        //todo whys the adapter calling get count twice??
     }
 
+    private void prepareRecyclerAdapter() {
+        adapter = new ItemListAdapter();
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
+
+    }
 }

@@ -5,7 +5,6 @@ import android.app.Application;
 import com.example.cdoherty.mvpdagger.Component.DaggerMyComponent;
 import com.example.cdoherty.mvpdagger.Component.MyComponent;
 import com.example.cdoherty.mvpdagger.Module.APIModule;
-import com.example.cdoherty.mvpdagger.Module.PresenterModule;
 
 /**
  * Created by cdoherty on 21/03/2018.
@@ -21,7 +20,6 @@ public class MyApplication extends Application {
         component = DaggerMyComponent
                 .builder()
                 .aPIModule(new APIModule(this))
-                .presenterModule(new PresenterModule(this))
                 .build();
     }
 

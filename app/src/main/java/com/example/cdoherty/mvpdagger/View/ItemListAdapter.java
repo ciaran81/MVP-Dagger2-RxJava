@@ -13,14 +13,15 @@ import com.example.cdoherty.mvpdagger.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemAdaptedHolder> {
+public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemAdaptedHolder>
+        implements IAdapterView {
 
     private ArrayList<Item> items;
     private static final String TAG = ItemListAdapter.class.getSimpleName();
     private AdapterPresenter adapterPresenter;
 
-    public ItemListAdapter(AdapterPresenter adapterPresenter) {
-        this.adapterPresenter = adapterPresenter;
+    public ItemListAdapter() {
+        this.adapterPresenter = new AdapterPresenter(this);
     }
 
     @Override
@@ -37,7 +38,20 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemAd
 
     @Override
     public int getItemCount() {
-       return adapterPresenter.getCount();
+        Log.d(TAG, "getItemCount: ");
+        return adapterPresenter.getCount();
+    }
+
+    public void setItems(ArrayList<Item> items) {
+        updateItemList(items);
+    }
+
+    private synchronized void updateItemList(ArrayList<Item> items) {
+        try {
+            this.items = items;
+        } finally {
+            notifyDataSetChanged();
+        }
     }
 
 
